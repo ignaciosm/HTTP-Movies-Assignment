@@ -33,11 +33,20 @@ export default class Movie extends React.Component {
   };
 
   handleEdit = () => {
-    console.log('button clicked', this.props)
     this.props.history.push(`/update-movie/${this.props.match.params.id}`)
   };
 
-  
+  handleDelete = (e) => {
+    // console.log('movie props', this.props.match.params.id)
+    e.preventDefault();
+    axios
+      .delete(`http://localhost:5000/api/movies/${this.props.match.params.id}`)
+      .then(res => {
+        this.props.setMovies(res.data);
+        this.props.history.push(`/movies/${this.props.movies.id}`);
+      })
+      .catch(err => console.log(err));
+  };
 
   render() {
     if (!this.state.movie) {
@@ -54,6 +63,7 @@ export default class Movie extends React.Component {
           Save
         </div>
         <button onClick={this.handleEdit}>Edit</button>
+        <button onClick={this.handleDelete}>Delete</button>
       </div>
     );
   }
